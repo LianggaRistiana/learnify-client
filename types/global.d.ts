@@ -3,6 +3,7 @@ type DocumentsThumbnail = {
 };
 
 type DocumentThumbnail = {
+  id: number;
   title: string;
   date: string;
 };
@@ -14,14 +15,14 @@ type Document = {
 };
 
 type DocumentQNA = {
-    QnA: QnA[];
+  QnA: QnA[];
 };
 
 type QnA = {
-    question : string;
-    answerChoiches : AnswerChoice[];
+  question: string;
+  answerChoiches: AnswerChoice[];
 };
 
 type AnswerChoice = {
-    content : string;
-}
+  content: string;
+};

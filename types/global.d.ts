@@ -5,7 +5,7 @@ type DocumentsThumbnail = {
 type DocumentThumbnail = {
   id: number;
   title: string;
-  date: string;
+  createdAt: string;
 };
 
 type DocumentDetail = {

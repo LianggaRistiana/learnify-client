@@ -6,6 +6,7 @@ export type DocumentData = {
   title: string
   summary: string
   text: string
+  createdAt: string;
 }
 
 export type GetDocumentResponse = {
@@ -13,12 +14,12 @@ export type GetDocumentResponse = {
   data?: DocumentData
 }
 
-export const getDocumentById = async (id: number): Promise<GetDocumentResponse> => {
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null
+export const getDocumentById = async (id: number, token: string): Promise<GetDocumentResponse> => {
+//   const token = typeof window !== "undefined" ? localStorage.getItem("token") : null
 
-  if (!token) {
-    return { message: "Unauthorized: No token found" }
-  }
+//   if (!token) {
+//     return { message: "Unauthorized: No token found" }
+//   }
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/document/${id}`, {
     method: "GET",

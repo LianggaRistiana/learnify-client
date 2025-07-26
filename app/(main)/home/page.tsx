@@ -1,6 +1,7 @@
 'use client'
 
-import { reqDocumentsThumbnailDummy } from "@/actions/get-documents-thumbnail-service";
+
+import { getAllDocuments } from "@/actions/get-documents-thumbnail-service";
 import HeroGreeting from "@/components/atoms/hero-greeting";
 import Skeletonthumbnail from "@/components/atoms/thumbnail-skeleton";
 import DocumentsThumbnail from "@/components/molecules/documents-thumbnail";
@@ -11,10 +12,23 @@ export default function Home() {
     const [documentsThumbnail, setDocumentsThumbnail] = useState<DocumentsThumbnail>();
     const [loading, setLoading] = useState(true);
 
-    const fetchDocumentsThumbnail = async () => {
+    const fetchDocuments = async () => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            toast.error("Token tidak ditemukan. Silakan login kembali.");
+            setLoading(false);
+            return;
+        }
+
         try {
-            const res = await reqDocumentsThumbnailDummy();
-            setDocumentsThumbnail(res);
+            const res = await getAllDocuments(token);
+            if (res.data) {
+                setDocumentsThumbnail({
+                    documents: res.data
+                });
+            }
+
         } catch (err) {
             console.error("Gagal fetch dokumen", err);
             toast.error("Gagal mendapatkan dokumen");
@@ -24,7 +38,7 @@ export default function Home() {
     };
 
     useEffect(() => {
-        fetchDocumentsThumbnail();
+        fetchDocuments();
     }, []);
 
 

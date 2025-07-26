@@ -1,14 +1,17 @@
 'use client'
 
 import DocumentSkeleton from "@/components/atoms/document-skeleton";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { getDocumentById } from "@/actions/get-document-service";
 
 export default function Document() {
     const params = useParams();
     const id = params?.id as string;
+
+    const router = useRouter();
 
     const [document, setDocument] = useState<DocumentDetail>();
     const [loading, setLoading] = useState(true);
@@ -22,27 +25,23 @@ export default function Document() {
         }
 
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/document/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const res = await getDocumentById(Number(id), token);
 
-            if (!res.ok) {
-                throw new Error("Gagal mengambil data dokumen.");
+            if (res.data) {
+                setDocument({
+                    id: res.data.id,
+                    title: res.data.title,
+                    date: new Date(res.data.createdAt).toLocaleDateString(),
+                    text: res.data.text,
+                    summary: res.data.summary,
+                });
+            }else{
+                router.push("/home");
+                toast.error(res.message || "Dokumen tidak ditemukan.");
             }
-
-            const data = await res.json();
-
-            setDocument({
-                id: data.data.id,
-                title: data.data.title,
-                date: new Date().toLocaleDateString(),
-                text: data.data.text,
-                summary : data.data.summary,
-            });
         } catch (error: any) {
             toast.error(error.message || "Terjadi kesalahan saat memuat dokumen.");
+            router.push("/home");
         } finally {
             setLoading(false);
         }

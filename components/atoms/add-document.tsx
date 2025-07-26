@@ -1,3 +1,5 @@
+"use client"
+
 import { useDropzone } from "react-dropzone"
 import { useCallback, useState } from "react"
 import { FileText, Plus, Upload, X } from "lucide-react"
@@ -10,9 +12,15 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
+import { uploadDocument } from "@/actions/post-document-service"
+import { useRouter } from "next/navigation"
 
 export default function AddDocument() {
+    const router = useRouter()
+
     const [file, setFile] = useState<File | null>(null)
+    const [loading, setLoading] = useState(false)
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         if (acceptedFiles.length > 0) {
@@ -35,6 +43,30 @@ export default function AddDocument() {
         setFile(null)
     }
 
+    const handleUpload = async () => {
+        if (!file) return
+        setLoading(true)
+        try {
+            const token = localStorage.getItem("token")
+            if (!token) throw new Error("Token not found")
+
+            const res = await uploadDocument(file, token)
+
+            if (res) {
+                toast.success(res.message || "Document uploaded successfully!")
+                router.push("document/" + res.document.id)
+            } else {
+                toast.error("Failed to upload document")
+                setFile(null)
+            }
+            
+        } catch (err: any) {
+            toast.error("Failed to upload document")
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -48,7 +80,9 @@ export default function AddDocument() {
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Add Document</DialogTitle>
-                    <DialogDescription>Upload your document (PDF, DOCX, or TXT)</DialogDescription>
+                    <DialogDescription>
+                        Upload your document (PDF, DOCX, or TXT)
+                    </DialogDescription>
                 </DialogHeader>
 
                 {file ? (
@@ -86,10 +120,21 @@ export default function AddDocument() {
                         )}
                     </div>
                 )}
-                {
-                    file &&
-                        <Button><Upload /> Upload</Button>
-                }
+
+                {file && (
+                    <Button
+                        onClick={handleUpload}
+                        disabled={loading}
+                        className="mt-4 flex items-center gap-2"
+                    >
+                        {loading ? "Uploading..." : (
+                            <>
+                                <Upload className="w-4 h-4" />
+                                Upload
+                            </>
+                        )}
+                    </Button>
+                )}
             </DialogContent>
         </Dialog>
     )

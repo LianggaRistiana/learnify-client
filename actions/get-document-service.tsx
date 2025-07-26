@@ -1,43 +1,40 @@
-export const reqDocumentDummy = async (id: string): Promise<DocumentDetail> => {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({
-                title: `Document ${id}`,
-                content: `This is the full content of Document ${id}, created to simulate a realistic paragraph.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-It contains multiple lines of text, separated by line breaks, to test how your frontend handles rich text formatting.
-You can display this in a <pre> tag or convert the line breaks to <br /> in your React component to preserve spacing.
-Make sure your layout gracefully handles long content like this, especially if displayed inside scrollable areas or limited containers.`,
-                date: "2025-07-26",
-            });
-        }, 1000);
-    });
-};
+"use server"
+
+export type DocumentData = {
+  id: number
+  user_id: number
+  title: string
+  summary: string
+  text: string
+}
+
+export type GetDocumentResponse = {
+  message: string
+  data?: DocumentData
+}
+
+export const getDocumentById = async (id: number): Promise<GetDocumentResponse> => {
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null
+
+  if (!token) {
+    return { message: "Unauthorized: No token found" }
+  }
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/document/${id}`, {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
+  })
+
+  if (!res.ok) {
+    return { message: "Failed to fetch document" }
+  }
+
+  const data = await res.json()
+
+  return {
+    message: data.message || "Document retrieved successfully",
+    data: data.data,
+  }
+}

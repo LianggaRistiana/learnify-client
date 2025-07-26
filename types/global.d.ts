@@ -9,9 +9,11 @@ type DocumentThumbnail = {
 };
 
 type DocumentDetail = {
+  id: number;
   title: string;
-  content: string;
+  summary: string;
   date: string;
+  text: string;
 };
 
 type DocumentQNA = {
@@ -21,8 +23,8 @@ type DocumentQNA = {
 };
 
 type UserAnswer = {
-    answerIds : number[];
-}
+  answerIds: number[];
+};
 
 type QnA = {
   id: number;

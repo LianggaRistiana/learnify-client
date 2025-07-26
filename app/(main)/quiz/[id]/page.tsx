@@ -38,7 +38,7 @@ export default function Quiz() {
         } catch (err) {
             console.error("Failed fetch quiz", err);
             toast.error("Failed to get quiz");
-            router.push("/document" + id);
+            router.push("/document/" + id);
         } finally {
             setLoading(false);
         }

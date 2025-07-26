@@ -57,9 +57,9 @@ export default function Document() {
             setLoadingQuiz(false);
             return;
         }
-
+        
         try {
-            const res = await generateQuiz(Number(id), 15, token);
+            const res = await generateQuiz(Number(id), 2, token);
 
             if (res.success) {
                 router.push("/quiz/" + Number(id));
@@ -93,7 +93,7 @@ export default function Document() {
             <div className="sticky bottom-0 right-4 left-4 pt-8 pb-4 bg-gradient-to-t from-background to-transparent">
                 <div className="flex justify-center">
                     <Button
-                        onClick={handleQuiz}
+                        onClick={() => handleQuiz()}
                         disabled={loading}
                         className="mt-4 flex items-center gap-2"
                     >

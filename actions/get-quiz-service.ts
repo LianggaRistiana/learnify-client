@@ -7,10 +7,11 @@ type ApiResponse<T> = {
 };
 
 export const getQuiz = async (documentId: number, token: string): Promise<ApiResponse<QuizResponse>> => {
-
-  const res = await fetch(`${process.env.API_URL}/quiz/document/${documentId}`, {
+  console.log(documentId)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/quiz/document/${documentId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
     },
   });
 

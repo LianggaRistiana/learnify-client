@@ -6,6 +6,7 @@ export const generateQuiz = async (documentId: number, numQuestions: number, tok
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 document_id: documentId,

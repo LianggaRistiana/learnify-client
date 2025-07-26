@@ -11,9 +11,11 @@ import {
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { toast } from "sonner";
-import { Loader } from "lucide-react";
+import { Loader, Plus, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const SearchGoogleDialog = () => {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = React.useState("");
   const [searchResultLoading, setSearchResultLoading] = React.useState(false);
   const [webResults, setWebResults] = React.useState([]);
@@ -50,6 +52,8 @@ const SearchGoogleDialog = () => {
 
     if (response.ok) {
       const data = await response.json();
+      //   console.log(data);
+      router.push("document/" + data.document.id);
       toast.success(data.message || "Webpage content added successfully!");
     } else {
       toast.error("Failed to submit webpage content.");
@@ -61,9 +65,14 @@ const SearchGoogleDialog = () => {
     <Dialog>
       <form>
         <DialogTrigger asChild>
-          <Button variant="outline" className="w-full">
-            Search on Internet
-          </Button>
+          <div className="w-full h-40 p-4 bg-sidebar overflow-hidden rounded-lg shadow-md cursor-pointer border hover:border-primary transition-all duration-300 ease-in-out flex flex-col justify-center items-center gap-2">
+            <div className="rounded-full bg-secondary w-10 h-10 flex items-center justify-center">
+              <Search />
+            </div>
+            <p className="text-muted-foreground text-sm">
+              Search Documents from Internet
+            </p>
+          </div>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>

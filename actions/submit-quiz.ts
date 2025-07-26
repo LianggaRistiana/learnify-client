@@ -15,13 +15,15 @@ export const submitQuiz = async (
     throw new Error("Token tidak ditemukan.");
   }
 
-  const res = await fetch(`${process.env.API_URL}/quiz/${quizId}/submit`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/quiz/${quizId}/submit`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify({
+      "answer_ids": body.answer_ids
+    }),
   });
 
   const data = await res.json();

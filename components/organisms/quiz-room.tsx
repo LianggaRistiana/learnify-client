@@ -17,15 +17,15 @@ export default function QuizRoom({ quiz }: Props) {
 
 
     const [userAnswer, setUserAnswer] = useState<UserAnswer>({
-        answerIds: Array(quiz.qnaCount).fill(null),
+        answer_ids: Array(quiz.qnaCount).fill(null),
     });
 
 
 
     const handleSelect = (questionIndex: number, answerId: number) => {
-        const newAnswerIds = [...userAnswer.answerIds];
+        const newAnswerIds = [...userAnswer.answer_ids];
         newAnswerIds[questionIndex] = answerId;
-        setUserAnswer({ answerIds: newAnswerIds });
+        setUserAnswer({ answer_ids: newAnswerIds });
     };
 
     const handleSubmit = async () => {
@@ -58,7 +58,7 @@ export default function QuizRoom({ quiz }: Props) {
                         />
                     ))}
 
-                    <Button disabled={loading} onClick={() => { handleSubmit}}>{
+                    <Button disabled={loading} onClick={handleSubmit}>{
                         loading ? "Submitting..." : "Submit"
                 }</Button>
                 </div>

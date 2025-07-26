@@ -47,7 +47,7 @@ type DocumentQNA = {
 };
 
 type UserAnswer = {
-  answerIds: number[];
+  answer_ids: number[];
 };
 
 type QnA = {

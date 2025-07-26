@@ -60,3 +60,22 @@ type AnswerChoice = {
   id: number;
   content: string;
 };
+
+type SelectedAnswer = {
+  answerId: number;
+  isCorrect: boolean;
+  suggestion: string;
+};
+
+type SubmitQuizResult = {
+  quizId: number;
+  score: number;
+  selectedAnswers: SelectedAnswer[];
+  allCorrectAnswers: SelectedAnswer[];
+};
+
+type SubmitQuizResponse = {
+  success: boolean;
+  message?: string;
+  data: SubmitQuizResult;
+};

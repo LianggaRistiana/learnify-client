@@ -1,31 +1,3 @@
-interface SelectedAnswer {
-  answerId: number;
-  isCorrect: boolean;
-  suggestion: string;
-}
-
-interface SubmitQuizResult {
-  quizId: number;
-  score: number;
-  selectedAnswers: SelectedAnswer[];
-  allCorrectAnswers: SelectedAnswer[];
-}
-
-interface SubmitQuizResponse {
-  success: boolean;
-  message?: string;
-  data: SubmitQuizResult;
-}
-
-interface SubmitQuizRequest {
-  answer_ids: number[];
-}
-
-interface SubmitQuizResponse {
-  score: number;
-  total_questions: number;
-  correct_answers: number;
-}
 
 interface ApiResponse<T> {
   success: boolean;
@@ -35,7 +7,7 @@ interface ApiResponse<T> {
 
 export const submitQuiz = async (
   quizId: number,
-  body: SubmitQuizRequest
+  body: UserAnswer
 ): Promise<SubmitQuizResponse> => {
   const token = localStorage.getItem("token");
 

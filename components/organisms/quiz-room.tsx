@@ -1,34 +1,70 @@
 import { useState } from "react";
 import QnaGroup from "../molecules/qna-group"
 import { Button } from "../ui/button";
+import { submitQuiz } from "@/actions/submit-quiz";
+import { toast } from "sonner";
+import { set } from "zod";
+import Result from "./result";
 
 type Props = {
     quiz: QuizResponse
 }
 
 export default function QuizRoom({ quiz }: Props) {
-  const [userAnswer, setUserAnswer] = useState<UserAnswer>({
-    answerIds: Array(quiz.qnaCount).fill(null), 
-  });
 
-  const handleSelect = (questionIndex: number, answerId: number) => {
-    const newAnswerIds = [...userAnswer.answerIds];
-    newAnswerIds[questionIndex] = answerId;
-    setUserAnswer({ answerIds: newAnswerIds });
-  };
+    const [loading, setLoading] = useState(false);
+    const [SubmitQuizResponse, setSubmitQuizResponse] = useState<SubmitQuizResponse>();
 
-  return (
-    <div className="space-y-6">
-      {quiz.questions?.map((qna, index) => (
-        <QnaGroup
-          key={qna.id}
-          question={qna.content}
-          answerChoices={qna.answers}
-          onSelect={(answerId) => handleSelect(index, answerId)}
-        />
-      ))}
-      
-      <Button onClick={() => {console.log(userAnswer)}}>Submit</Button>
-    </div>
-  );
+
+    const [userAnswer, setUserAnswer] = useState<UserAnswer>({
+        answerIds: Array(quiz.qnaCount).fill(null),
+    });
+
+
+
+    const handleSelect = (questionIndex: number, answerId: number) => {
+        const newAnswerIds = [...userAnswer.answerIds];
+        newAnswerIds[questionIndex] = answerId;
+        setUserAnswer({ answerIds: newAnswerIds });
+    };
+
+    const handleSubmit = async () => {
+        setLoading(true);
+        try {
+            const res = await submitQuiz(quiz.id, userAnswer);
+            if (res.success) {
+                setSubmitQuizResponse(res)
+            }
+        } catch (err) {
+            console.error("Failed submit quiz", err);
+            toast.error("Failed to submit quiz");
+        } finally {
+            setLoading(false);
+        }
+
+
+    }
+
+    return (
+        <>
+            {
+                !SubmitQuizResponse && <div className="space-y-6">
+                    {quiz.questions?.map((qna, index) => (
+                        <QnaGroup
+                            key={qna.id}
+                            question={qna.content}
+                            answerChoices={qna.answers}
+                            onSelect={(answerId) => handleSelect(index, answerId)}
+                        />
+                    ))}
+
+                    <Button onClick={() => { handleSubmit }}>Submit</Button>
+                </div>
+            }
+
+            {
+                SubmitQuizResponse && <Result data={SubmitQuizResponse}></Result>
+            }
+        </>
+    );
 }

@@ -47,7 +47,7 @@ export default function Login() {
             const res = await registerUser(values);
             if (res.token) {
                 toast.success("Success Create a new account");
-                localStorage.setItem("token", `Bearer ${res.token}`);
+                localStorage.setItem("token", `${res.token}`);
                 localStorage.setItem("email", `${res.user?.email}`);
                 localStorage.setItem("name", `${res.user?.name}`);
 

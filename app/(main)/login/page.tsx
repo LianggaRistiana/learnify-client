@@ -50,7 +50,7 @@ export default function Login() {
                 return;
             }
 
-            localStorage.setItem("token", `Bearer ${res.token}`);
+            localStorage.setItem("token", `${res.token}`);
             localStorage.setItem("email", `${res.user?.email}`);
             localStorage.setItem("name", `${res.user?.name}`);
 

@@ -6,6 +6,7 @@ type DocumentThumbnail = {
   id: number;
   title: string;
   createdAt: string;
+  summary: string;
 };
 
 type DocumentDetail = {

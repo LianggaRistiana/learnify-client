@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { getDocumentById } from "@/actions/get-document-service";
 import { generateQuiz } from "@/actions/generate-quiz-service";
 import { Upload } from "lucide-react";
+import { set } from "zod";
 
 export default function Document() {
     const params = useParams();
@@ -16,10 +17,11 @@ export default function Document() {
     const router = useRouter();
 
     const [document, setDocument] = useState<DocumentDetail>();
-    const [loading, setLoading] = useState(true);
-    const [loadingQuiz, setLoadingQuiz] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [loadingQuiz, setLoadingQuiz] = useState(false);
 
     const fetchDocument = async () => {
+        setLoading(true);
         const token = localStorage.getItem("token");
         if (!token) {
             toast.error("Token tidak ditemukan. Silakan login kembali.");
@@ -51,6 +53,7 @@ export default function Document() {
     };
 
     const handleQuiz = async () => {
+        setLoadingQuiz(true);
         const token = localStorage.getItem("token");
         if (!token) {
             toast.error("Token tidak ditemukan. Silakan login kembali.");

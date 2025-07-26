@@ -1,0 +1,27 @@
+type DocumentsThumbnail = {
+  documents: DocumentThumbnail[];
+};
+
+type DocumentThumbnail = {
+  title: string;
+  date: string;
+};
+
+type Document = {
+  title: string;
+  content: string;
+  date: string;
+};
+
+type DocumentQNA = {
+    QnA: QnA[];
+};
+
+type QnA = {
+    question : string;
+    answerChoiches : AnswerChoice[];
+};
+
+type AnswerChoice = {
+    content : string;
+}

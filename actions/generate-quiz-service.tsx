@@ -2,16 +2,21 @@
 
 export const generateQuiz = async (documentId: number, numQuestions: number, token: string) => {
     try {
+        console.log(JSON.stringify({
+                document_id: documentId,
+                num_questions: numQuestions,
+            }))
+
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/quiz/create`, {
-            method: "GET",
+            method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 document_id: documentId,
                 num_questions: numQuestions,
-            }),
-            cache: "no-store", 
+            }), 
         });
 
         const data = await res.json();

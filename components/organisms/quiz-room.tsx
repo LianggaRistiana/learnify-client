@@ -20,8 +20,6 @@ export default function QuizRoom({ quiz }: Props) {
         answer_ids: Array(quiz.qnaCount).fill(null),
     });
 
-
-
     const handleSelect = (questionIndex: number, answerId: number) => {
         const newAnswerIds = [...userAnswer.answer_ids];
         newAnswerIds[questionIndex] = answerId;
@@ -29,6 +27,12 @@ export default function QuizRoom({ quiz }: Props) {
     };
 
     const handleSubmit = async () => {
+        const hasNull = userAnswer.answer_ids.some((id) => id === null);
+        if(hasNull) {
+            toast.error("Must answer all questions!")
+            return
+        }
+
         setLoading(true);
         try {
             const res = await submitQuiz(quiz.id, userAnswer);
@@ -42,13 +46,13 @@ export default function QuizRoom({ quiz }: Props) {
             setLoading(false);
         }
 
-
     }
 
     return (
         <>
             {
-                !SubmitQuizResponse && <div className="space-y-6">
+                !SubmitQuizResponse && 
+                <div className="space-y-6">
                     {quiz.questions?.map((qna, index) => (
                         <QnaGroup
                             key={qna.id}
@@ -58,14 +62,14 @@ export default function QuizRoom({ quiz }: Props) {
                         />
                     ))}
 
-                    <Button disabled={loading} onClick={handleSubmit}>{
-                        loading ? "Submitting..." : "Submit"
-                }</Button>
+                    <Button disabled={loading} onClick={handleSubmit}>
+                        {loading ? "Submitting..." : "Submit"}
+                    </Button>
                 </div>
             }
 
             {
-                SubmitQuizResponse && <Result data={SubmitQuizResponse}></Result>
+                SubmitQuizResponse && <Result question={quiz.questions} data={SubmitQuizResponse}></Result>
             }
         </>
     );

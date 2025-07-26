@@ -1,14 +1,15 @@
 'use client'
 
 import DocumentSkeleton from "@/components/atoms/document-skeleton";
-import { use, useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { getDocumentById } from "@/actions/get-document-service";
 import { generateQuiz } from "@/actions/generate-quiz-service";
-import { Upload } from "lucide-react";
+import { Loader2, Upload } from "lucide-react";
 import { set } from "zod";
+import ReactMarkdown from 'react-markdown'
 
 export default function Document() {
     const params = useParams();
@@ -62,7 +63,7 @@ export default function Document() {
         }
         
         try {
-            const res = await generateQuiz(Number(id), 2, token);
+            const res = await generateQuiz(Number(id), 10, token);
 
             if (res.success) {
                 router.push("/quiz/" + Number(id));
@@ -91,16 +92,22 @@ export default function Document() {
         <div className="w-full relative">
             <h1 className="text-2xl font-bold text-center">{document.title}</h1>
             <p className="text-sm text-gray-500 mb-4 text-right">{document.date}</p>
-            <div className="whitespace-pre-line">{document.summary}</div>
+            <div className="whitespace-pre-line">
+                <ReactMarkdown children={document.summary}/>
+            </div>
 
             <div className="sticky bottom-0 right-4 left-4 pt-8 pb-4 bg-gradient-to-t from-background to-transparent">
                 <div className="flex justify-center">
                     <Button
                         onClick={() => handleQuiz()}
-                        disabled={loading}
+                        disabled={loadingQuiz}
                         className="mt-4 flex items-center gap-2"
                     >
-                        {loadingQuiz ? "Generating..." : (
+                        {loadingQuiz ? 
+                            <span className="flex items-center justify-center gap-2">
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                                Generating...
+                            </span> : (
                             <>
                                 <Upload className="w-4 h-4" />
                                 Generate Quiz

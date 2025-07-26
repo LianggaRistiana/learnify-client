@@ -1,6 +1,5 @@
 'use client'
 
-import { loginSchema } from "@/components/schema/login-schema"
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -23,6 +22,10 @@ import {
 } from "@/components/ui/form"
 import { useRouter } from "next/navigation"
 import { registerSchema } from "@/components/schema/register-schema"
+import { registerUser } from "@/actions/register-service"
+import { useState } from "react"
+import { toast } from "sonner"
+import { Loader2 } from "lucide-react"
 
 export default function Login() {
     const router = useRouter();
@@ -36,9 +39,24 @@ export default function Login() {
             confirmPassword: ''
         },
     })
+    const [loading, setLoading] = useState(false);
 
-    function handleRegister(values: z.infer<typeof registerSchema>) {
-
+    async function handleRegister(values: z.infer<typeof registerSchema>) {
+        setLoading(true);
+        try {
+            const res = await registerUser(values);
+            if (res.token) {
+                toast.success("Success Create a new account");
+                router.push("/home");
+            } else {
+                toast.error(res.message || "Registration Failed");
+            }
+        } catch (err) {
+            console.error(err);
+            toast.error("Something went wrong. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -71,9 +89,9 @@ export default function Login() {
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Email</FormLabel>
+                                        <FormLabel>Name</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="you@example.com" {...field} />
+                                            <Input placeholder="Guest" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -97,7 +115,7 @@ export default function Login() {
                                 name="confirmPassword"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Password</FormLabel>
+                                        <FormLabel>Confirm password</FormLabel>
                                         <FormControl>
                                             <Input type="password" placeholder="••••••••" {...field} />
                                         </FormControl>
@@ -107,7 +125,14 @@ export default function Login() {
                             />
                             <div className="flex flex-col gap-4">
                                 <Button type="submit" className="w-full">
-                                    Create Account
+                                    {loading ? (
+                                        <span className="flex items-center justify-center gap-2">
+                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                            Loading...
+                                        </span>
+                                    ) : (
+                                        "Create Account"
+                                    )}
                                 </Button>
                             </div>
                         </form>

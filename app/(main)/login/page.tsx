@@ -22,6 +22,10 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { useRouter } from "next/navigation"
+import { loginUser } from "@/actions/login-service"
+import { toast } from "sonner"
+import { useState } from "react"
+import { Loader2 } from "lucide-react";
 
 export default function Login() {
     const router = useRouter();
@@ -34,8 +38,29 @@ export default function Login() {
         },
     })
 
-    function handleLogin(values: z.infer<typeof loginSchema>) {
+    const [loading, setLoading] = useState(false);
 
+    async function handleLogin(values: z.infer<typeof loginSchema>) {
+        setLoading(true);
+        try {
+            const res = await loginUser(values);
+
+            if (!res.token) {
+                toast.error(res.message || "Login Failed");
+                return;
+            }
+
+            // Simpan token (misal di localStorage atau cookie)
+            localStorage.setItem("token", res.token);
+
+            toast.success(res.message || "Login Failed");
+            router.push("/home");
+        } catch (err) {
+            console.error("Login error:", err);
+            toast.error("Something went wrong. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -77,8 +102,16 @@ export default function Login() {
                                 )}
                             />
                             <div className="flex flex-col gap-4">
-                                <Button type="submit" className="w-full">
-                                    Login
+
+                                <Button type="submit" className="w-full" disabled={loading}>
+                                    {loading ? (
+                                        <span className="flex items-center justify-center gap-2">
+                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                            Loading...
+                                        </span>
+                                    ) : (
+                                        "Login"
+                                    )}
                                 </Button>
 
                             </div>

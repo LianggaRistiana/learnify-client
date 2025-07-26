@@ -3,25 +3,42 @@
 import DocumentSkeleton from "@/components/atoms/document-skeleton";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useParams } from "next/navigation";
-import { reqDocumentQnaDummy } from "@/actions/get-quiz-service";
-import Question from "@/components/atoms/question";
+import { useParams, useRouter } from "next/navigation";
 import QuizRoom from "@/components/organisms/quiz-room";
+import { getQuiz } from "@/actions/get-quiz-service";
 
 export default function Quiz() {
+    const router = useRouter();
     const params = useParams();
     const id = params?.id as string;
 
-    const [documentQuiz, setDocumentQuiz] = useState<DocumentQNA>();
+    const [documentQuiz, setDocumentQuiz] = useState<QuizResponse>();
     const [loading, setLoading] = useState(true);
 
     const fetchQuiz = async () => {
+        setLoading(true);
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            toast.error("Token tidak ditemukan. Silakan login kembali.");
+            setLoading(false);
+            return;
+        }
+
         try {
-            const res = await reqDocumentQnaDummy(id);
-            setDocumentQuiz(res);
+            // const res = await reqDocumentQnaDummy(id);
+            const res = await getQuiz(Number(id), token);
+            if (res.data) {
+
+                setDocumentQuiz(res.data);
+            } else {
+                toast.error(res.message || "Quiz not found");
+            }
+
         } catch (err) {
-            console.error("Gagal fetch dokumen", err);
-            toast.error("Gagal mendapatkan dokumen");
+            console.error("Failed fetch quiz", err);
+            toast.error("Failed to get quiz");
+            router.push("/document" + id);
         } finally {
             setLoading(false);
         }

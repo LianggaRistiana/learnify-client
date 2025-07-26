@@ -3,12 +3,12 @@ import QnaGroup from "../molecules/qna-group"
 import { Button } from "../ui/button";
 
 type Props = {
-    quiz: DocumentQNA
+    quiz: QuizResponse
 }
 
 export default function QuizRoom({ quiz }: Props) {
   const [userAnswer, setUserAnswer] = useState<UserAnswer>({
-    answerIds: Array(quiz.qna.length).fill(null), 
+    answerIds: Array(quiz.qnaCount).fill(null), 
   });
 
   const handleSelect = (questionIndex: number, answerId: number) => {
@@ -19,11 +19,11 @@ export default function QuizRoom({ quiz }: Props) {
 
   return (
     <div className="space-y-6">
-      {quiz.qna?.map((qna, index) => (
+      {quiz.questions?.map((qna, index) => (
         <QnaGroup
           key={qna.id}
-          question={qna.question}
-          answerChoices={qna.answerChoices}
+          question={qna.content}
+          answerChoices={qna.answers}
           onSelect={(answerId) => handleSelect(index, answerId)}
         />
       ))}

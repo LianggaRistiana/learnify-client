@@ -2,6 +2,29 @@ type DocumentsThumbnail = {
   documents: DocumentThumbnail[];
 };
 
+type QuizResponse = {
+  id: number;
+  doc_id: number;
+  createdAt: string;
+  updatedAt: string;
+  qnaCount: number;
+  quizTime: number;
+  score: number | null;
+  questions: QuizQuestion[];
+};
+
+type QuizQuestion = {
+  id: number;
+  quizzes_id: number;
+  content: string;
+  answers: QuizAnswer[];
+};
+
+type QuizAnswer = {
+  id: number;
+  content: string;
+};
+
 type DocumentThumbnail = {
   id: number;
   title: string;

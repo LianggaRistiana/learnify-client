@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { getDocumentById } from "@/actions/get-document-service";
+import { generateQuiz } from "@/actions/generate-quiz-service";
+import { Upload } from "lucide-react";
 
 export default function Document() {
     const params = useParams();
@@ -15,6 +17,7 @@ export default function Document() {
 
     const [document, setDocument] = useState<DocumentDetail>();
     const [loading, setLoading] = useState(true);
+    const [loadingQuiz, setLoadingQuiz] = useState(true);
 
     const fetchDocument = async () => {
         const token = localStorage.getItem("token");
@@ -35,7 +38,7 @@ export default function Document() {
                     text: res.data.text,
                     summary: res.data.summary,
                 });
-            }else{
+            } else {
                 router.push("/home");
                 toast.error(res.message || "Dokumen tidak ditemukan.");
             }
@@ -46,6 +49,30 @@ export default function Document() {
             setLoading(false);
         }
     };
+
+    const handleQuiz = async () => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            toast.error("Token tidak ditemukan. Silakan login kembali.");
+            setLoadingQuiz(false);
+            return;
+        }
+
+        try {
+            const res = await generateQuiz(Number(id), 15, token);
+
+            if (res.success) {
+                router.push("/quiz/" + Number(id));
+            } else {
+                toast.error(res.message || "Failed Generate Quiz");
+            }
+        } catch (error: any) {
+            toast.error(error.message || "Failed Generate Quiz");
+        } finally {
+            setLoadingQuiz(false);
+        }
+
+    }
 
     useEffect(() => {
         if (id) {
@@ -65,7 +92,18 @@ export default function Document() {
 
             <div className="sticky bottom-0 right-4 left-4 pt-8 pb-4 bg-gradient-to-t from-background to-transparent">
                 <div className="flex justify-center">
-                    <Button className="px-16">Take Quiz</Button>
+                    <Button
+                        onClick={handleQuiz}
+                        disabled={loading}
+                        className="mt-4 flex items-center gap-2"
+                    >
+                        {loading ? "Generating..." : (
+                            <>
+                                <Upload className="w-4 h-4" />
+                                Generate Quiz
+                            </>
+                        )}
+                    </Button>
                 </div>
             </div>
         </div>

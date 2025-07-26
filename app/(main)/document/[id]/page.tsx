@@ -1,17 +1,11 @@
 'use client'
 
-import { reqDocumentDummy } from "@/actions/document-service";
 import DocumentSkeleton from "@/components/atoms/document-skeleton";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-
-type DocumentDetail = {
-    title: string;
-    content: string;
-    date: string;
-};
+import { reqDocumentDummy } from "@/actions/get-document-service";
 
 export default function Document() {
     const params = useParams();

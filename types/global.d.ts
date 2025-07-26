@@ -15,14 +15,18 @@ type DocumentDetail = {
 };
 
 type DocumentQNA = {
-  QnA: QnA[];
+  id: number;
+  time: number;
+  qna: QnA[];
 };
 
 type QnA = {
+  id: number;
   question: string;
   answerChoiches: AnswerChoice[];
 };
 
 type AnswerChoice = {
+  id: number;
   content: string;
 };

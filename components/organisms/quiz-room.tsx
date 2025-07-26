@@ -58,7 +58,9 @@ export default function QuizRoom({ quiz }: Props) {
                         />
                     ))}
 
-                    <Button onClick={() => { handleSubmit }}>Submit</Button>
+                    <Button disabled={loading} onClick={() => { handleSubmit}}>{
+                        loading ? "Submitting..." : "Submit"
+                }</Button>
                 </div>
             }
 

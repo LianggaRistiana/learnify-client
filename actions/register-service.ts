@@ -3,6 +3,10 @@
 export type RegisterResponse = {
   token?: string;
   message?: string;
+  user?: {
+    name: string;
+    email: string;
+  };
 };
 
 export const registerUser = async ({

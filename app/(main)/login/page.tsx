@@ -50,8 +50,9 @@ export default function Login() {
                 return;
             }
 
-            // Simpan token (misal di localStorage atau cookie)
-            localStorage.setItem("token", res.token);
+            localStorage.setItem("token", `Bearer ${res.token}`);
+            localStorage.setItem("email", `${res.user?.email}`);
+            localStorage.setItem("name", `${res.user?.name}`);
 
             toast.success(res.message || "Login Failed");
             router.push("/home");

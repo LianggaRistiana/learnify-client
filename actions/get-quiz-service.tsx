@@ -10,7 +10,7 @@ export async function reqDocumentQnaDummy(documentId: string): Promise<DocumentQ
       {
         id: 1,
         question: "Apa ibukota Indonesia?",
-        answerChoiches: [
+        answerChoices: [
           { id: 1, content: "Jakarta" },
           { id: 2, content: "Bandung" },
           { id: 3, content: "Surabaya" },
@@ -20,7 +20,7 @@ export async function reqDocumentQnaDummy(documentId: string): Promise<DocumentQ
       {
         id: 2,
         question: "Siapa presiden pertama Indonesia?",
-        answerChoiches: [
+        answerChoices: [
           { id: 1, content: "Soekarno" },
           { id: 2, content: "Soeharto" },
           { id: 3, content: "Habibie" },
@@ -30,7 +30,7 @@ export async function reqDocumentQnaDummy(documentId: string): Promise<DocumentQ
       {
         id: 3,
         question: "Apa nama mata uang Indonesia?",
-        answerChoiches: [
+        answerChoices: [
           { id: 1, content: "Rupiah" },
           { id: 2, content: "Dollar" },
           { id: 3, content: "Yen" },

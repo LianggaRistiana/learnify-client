@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { useParams } from "next/navigation";
 import { reqDocumentQnaDummy } from "@/actions/get-quiz-service";
 import Question from "@/components/atoms/question";
+import QuizRoom from "@/components/organisms/quiz-room";
 
 export default function Quiz() {
     const params = useParams();
@@ -32,14 +33,22 @@ export default function Quiz() {
         }
     }, [id]);
 
-    if (loading) return <DocumentSkeleton />;
+    if (loading) return <div>
+        <DocumentSkeleton />
+        <DocumentSkeleton />
+        <DocumentSkeleton />
+        <DocumentSkeleton />
+    </div>
+        ;
 
     if (!document) return <div>Dokumen tidak ditemukan.</div>;
 
     return (
         <div className="w-full relative">
-            <Question>sdasdsdasad</Question>
-            
+            {
+                documentQuiz &&
+                <QuizRoom quiz={documentQuiz} />
+            }
         </div>
     );
 }

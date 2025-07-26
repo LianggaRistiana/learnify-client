@@ -23,7 +23,7 @@ type DocumentQNA = {
 type QnA = {
   id: number;
   question: string;
-  answerChoiches: AnswerChoice[];
+  answerChoices: AnswerChoice[];
 };
 
 type AnswerChoice = {

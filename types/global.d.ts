@@ -20,6 +20,10 @@ type DocumentQNA = {
   qna: QnA[];
 };
 
+type UserAnswer = {
+    answerIds : number[];
+}
+
 type QnA = {
   id: number;
   question: string;

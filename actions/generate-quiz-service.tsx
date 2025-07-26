@@ -3,7 +3,7 @@
 export const generateQuiz = async (documentId: number, numQuestions: number, token: string) => {
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/quiz/create`, {
-            method: "GET",
+            method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`,
             },
@@ -11,7 +11,6 @@ export const generateQuiz = async (documentId: number, numQuestions: number, tok
                 document_id: documentId,
                 num_questions: numQuestions,
             }),
-            cache: "no-store", 
         });
 
         const data = await res.json();

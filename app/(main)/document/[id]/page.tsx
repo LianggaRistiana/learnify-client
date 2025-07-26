@@ -97,7 +97,7 @@ export default function Document() {
                         disabled={loading}
                         className="mt-4 flex items-center gap-2"
                     >
-                        {loading ? "Generating..." : (
+                        {loadingQuiz ? "Generating..." : (
                             <>
                                 <Upload className="w-4 h-4" />
                                 Generate Quiz

@@ -1,6 +1,6 @@
 'use client'
 
-import { reqDocumentsThumbnailDummy } from "@/actions/documents-thumbnail";
+import { reqDocumentsThumbnailDummy } from "@/actions/documents-thumbnail-service";
 import HeroGreeting from "@/components/atoms/hero-greeting";
 import Skeletonthumbnail from "@/components/atoms/thumbnail-skeleton";
 import DocumentsThumbnail from "@/components/molecules/documents-thumbnail";

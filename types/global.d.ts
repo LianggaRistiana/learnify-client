@@ -8,7 +8,7 @@ type DocumentThumbnail = {
   date: string;
 };
 
-type Document = {
+type DocumentDetail = {
   title: string;
   content: string;
   date: string;
